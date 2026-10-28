@@ -3,13 +3,13 @@ from datetime import datetime
 
 API_URL = "https://api.open-meteo.com/v1/forecast?latitude=53.1235&longitude=18.0076&hourly=temperature_2m,precipitation,weather_code,wind_speed_10m&timezone=auto"
 
-# Fetch json dict from Open-Meteo
+# Fetch JSON dict from Open-Meteo
 data = requests.get(API_URL).json()
 # Get hourly weather data from list 'hourly'
 weather = data['hourly']
 
 def _log_options():
-    """Func for logging. Nothing special"""
+    """Func for options logging. Nothing special"""
     print("\n|----------------------------------------------------------------------------------------------------------|\n"
           f"[OPTIONS_LOG] >>> {weather.keys()} |\n"
           "|----------------------------------------------------------------------------------------------------------|\n")
