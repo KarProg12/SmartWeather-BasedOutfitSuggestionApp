@@ -5,9 +5,7 @@ API_URL = "https://api.open-meteo.com/v1/forecast?latitude=53.1235&longitude=18.
 
 def _log_options():
     """Func for options logging. Nothing special"""
-    print("\n|----------------------------------------------------------------------------------------------------------|\n"
-          f"[OPTIONS_LOG] >>> {weather.keys()} |\n"
-          "|----------------------------------------------------------------------------------------------------------|\n")
+    print(f"\n[OPTIONS_LOG] >>> {weather.keys()}\n")
 
 # Fetch JSON dict from Open-Meteo
 data = requests.get(API_URL).json()
