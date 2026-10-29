@@ -5,7 +5,9 @@ API_URL = "https://api.open-meteo.com/v1/forecast?latitude=53.1235&longitude=18.
 
 def _log_options():
     """Func for options logging. Nothing special"""
-    print(f"\n[OPTIONS_LOG] >>> {weather.keys()}\n")
+    print(f"\n!!! THESE ARE LOGS TO SHOW WHAT FUNCS DOES Open-Meteo HAVE (only keys of the dicts) !!!\n"
+          f"\n[ALL_OPTIONS_LOG]\n >>> {data.keys()}\n"
+          f"\n[WEATHER_OPTIONS_LOG]\n >>> {weather.keys()}\n")
 
 # Fetch JSON dict from Open-Meteo
 data = requests.get(API_URL).json()
@@ -27,7 +29,7 @@ precipitation = weather['precipitation'][hr_index]
 wind_speed = weather['wind_speed_10m'][hr_index]
 
 def display_weather_info():
-    print("TEST_WEATHER_FORECAST (for the nearest hour):\n"
+    print("\nTEST_WEATHER_FORECAST (for the nearest hour):\n"
           "---------------------------------------------\n"
           f">>> [date format: Y-m-d-H:M] <<<\n"
           f"  DATE: {now_date}\n"
