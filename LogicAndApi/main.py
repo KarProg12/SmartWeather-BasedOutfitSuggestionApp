@@ -11,10 +11,13 @@ def _log_options():
 
 # Fetch JSON dict from Open-Meteo
 data = requests.get(API_URL).json()
+
 # Get hourly weather data from list 'hourly' in fetched JSON file from Open-Meteo
 weather = data['hourly']
 
+# --> TIME FETCHING SECTION <--
 now = datetime.now()
+
 # Fetch actual hour in format matching Open-Meteo format (e.g. "2026-10-27T21:00")
 hourly_weather = now.strftime("%Y-%m-%dT%H:00")
 now_date = now.strftime("%d.%m.%Y | %H:%M")
