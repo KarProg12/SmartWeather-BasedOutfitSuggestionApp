@@ -1,3 +1,3 @@
-App/tests.py
-LogicAndApi/tests.py
+tests_logic.py
+tests_app.py
 .idea
