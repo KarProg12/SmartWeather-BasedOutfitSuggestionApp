@@ -1,3 +1,4 @@
+import main_logic
 from main_logic import WeatherFetcher
 
 
