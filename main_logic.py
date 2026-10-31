@@ -59,8 +59,12 @@ class WeatherFetcher:
         if not self.data:
             print("\nTHERE'S NOTHING TO LOG.\nUSE fetch_weather() FIRST")
 
-        print(f"\n[ALL_OPTIONS_LOG]\n >>> {list(self.data.keys())}\n"
-              f"[WEATHER_OPTIONS_LOG]\n >>> {list(self.hourly.keys())}\n")
+        print(f"\n!!! THESE LOGS ARE ONLY FOR DEV !!!\n"
+              f"===================================\n"
+              f"[ALL_OPTIONS_LOG]\n >>> {list(self.data.keys())}\n"
+              f"[WEATHER_OPTIONS_LOG]\n >>> {list(self.hourly.keys())}\n"
+              f"===================================\n\n"
+              f"###############-APP-###############")
 
     def display_weather_info(self):
         if not self.hourly:
