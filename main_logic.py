@@ -4,7 +4,7 @@ from datetime import datetime
 
 class WeatherCodeTranslator:
     def __init__(self):
-        self._CODES = {
+        self._WEATHER_CODES = {
             0: "Słonecznie, bezchmurnie",
             1: "Przejaśnienia, prawie bezchmurnie",
             2: "Umiarkowane, częściowe zachmurzenie",
@@ -33,7 +33,7 @@ class WeatherCodeTranslator:
 
     def get_description(self, weather_code):
         """Fetches the description. If weather code is unknown returns error message"""
-        return self._CODES.get(weather_code, "ERROR: Unknown weather code")
+        return self._WEATHER_CODES.get(weather_code, "ERROR: Unknown weather code")
 
 
 class WeatherFetcher:
