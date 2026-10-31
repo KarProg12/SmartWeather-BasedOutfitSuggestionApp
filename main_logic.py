@@ -4,6 +4,7 @@ from datetime import datetime
 
 class WeatherCodeTranslator:
     def __init__(self):
+        # Dict with: key(weather code): val(short weather code description)
         self._WEATHER_CODES = {
             0: "Słonecznie, bezchmurnie",
             1: "Przejaśnienia, prawie bezchmurnie",
@@ -32,26 +33,55 @@ class WeatherCodeTranslator:
         }
 
     def get_description(self, weather_code):
-        """Fetches the description. If weather code is unknown returns error message"""
+        """Gets the description by key (weather code).
+         If unknown weather code returns error message"""
         return self._WEATHER_CODES.get(weather_code, "ERROR: Unknown weather code")
 
 
 class WeatherFetcher:
-    API_URL = "https://api.open-meteo.com/v1/forecast?latitude=53.1235&longitude=18.0076&hourly=temperature_2m,precipitation,weather_code,wind_speed_10m&timezone=auto"
-
     def __init__(self):
+        """Attributes are dicts in which will be stored all
+        keys and vals from JSON file from Open-Meteo"""
+        # There'll be stored whole JSON file
         self.data = {}
+        # There'll be stored all values of key 'hourly' from JSON file
         self.hourly = {}
+        self.lang_input = input("\nEnter language you want (e.g. en, pl):\n >>> ")
+        self.city_name = input("Enter the name of the city you want to check the weather in:\n >>> ")
+        self.URL_TO_PICK_CITY_LAT_AND_LONG = f"https://geocoding-api.open-meteo.com/v1/search?name={self.city_name.title()}&count=1&language={self.lang_input}"
+        self.city_data = {}
+        self.city_name = ""
+        self.latitude = ""
+        self.longitude = ""
+        self.API_URL = ""
 
-    def fetch_weather(self):
+    def get_city_data(self):
+        """Get city's latitude and longitude by entering its name"""
         try:
-            # Fetch JSON dict from Open-Meteo
-            response = requests.get(self.API_URL)
-            self.data = response.json()
-            self.hourly = self.data['hourly']
+            self.data = requests.get(self.URL_TO_PICK_CITY_LAT_AND_LONG).json()
+            self.city_data = self.data['results'][0]
+            self.city_name += self.city_data['name']
+            self.latitude += str(self.city_data['latitude'])
+            self.longitude += str(self.city_data['longitude'])
+            self.API_URL += (f"https://api.open-meteo.com/v1/forecast?latitude={self.latitude}&longitude={self.longitude}&"
+                   "hourly=temperature_2m,precipitation,weather_code,wind_speed_10m,relative_humidity_2m&timezone=auto")
             return True
         except Exception as e:
             print(f"ERROR OF FETCHING DATA: {e}")
+            # False occurs skipping the code in if statement and prints error in else statement also in main app file
+            return False
+
+    def fetch_weather(self):
+        """Here's whole logic of getting data about weather from Open-Meteo"""
+        try:
+            # Fetch JSON dict from Open-Meteo
+            self.data = requests.get(self.API_URL).json()
+            self.hourly = self.data['hourly']
+            # Returning True is important because it executes the code in if statement in main app file
+            return True
+        except Exception as e:
+            print(f"ERROR OF FETCHING DATA: {e}")
+            # False occurs skipping the code in if statement and prints error in else statement also in main app file
             return False
 
     def _log_options(self):
@@ -82,6 +112,7 @@ class WeatherFetcher:
             temperature = self.hourly['temperature_2m'][hr_index]
             precipitation = self.hourly['precipitation'][hr_index]
             wind_speed = self.hourly['wind_speed_10m'][hr_index]
+            humidity = self.hourly['relative_humidity_2m'][hr_index]
 
             # Fetching and translating weather code
             raw_code = self.hourly['weather_code'][hr_index]
@@ -90,11 +121,13 @@ class WeatherFetcher:
 
             print("\nWEATHER_FORECAST (for the nearest hour):\n"
                   "---------------------------------------------\n"
-                  f"  DATE: {date_for_usr}\n"
-                  f"  WHAT_WEATHER: {weather_description}\n"
-                  f"  TEMPERATURE: {temperature}°C\n"
-                  f"  PRECIPITATION: {precipitation}mm\n"
-                  f"  WIND_SPEED: {wind_speed}km/h")
+                  f"  NAZWA_MIASTA:\n    {self.city_name}\n"
+                  f"\n  DATA | GODZINA\n(czas lokalny urządzenia, nie sprawdzanego kraju):\n    {date_for_usr}\n"
+                  f"\n  OPIS_POGODY:\n    {weather_description}\n"
+                  f"\n  TEMPERATURA:\n    {temperature}°C\n"
+                  f"\n  WILGOTNOŚĆ:\n    {humidity}%\n"
+                  f"\n  GĘSTOŚĆ_OPADÓW:\n    {precipitation}mm\n"
+                  f"\n  PRĘDKOŚĆ_WIATRU:\n    {wind_speed}km/h")
 
         except ValueError:
             print(f"\nERROR: HOUR {hourly_weather_time} IS OUT OF FORECAST SCOPE")
