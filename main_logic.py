@@ -46,9 +46,9 @@ class WeatherFetcher:
         self.data = {}
         # There'll be stored all values of key 'hourly' from JSON file
         self.hourly = {}
-        self.lang_input = input("\nEnter language you want (e.g. en, pl):\n >>> ")
-        self.city_name = input("Enter the name of the city you want to check the weather in:\n >>> ")
-        self.URL_TO_PICK_CITY_LAT_AND_LONG = f"https://geocoding-api.open-meteo.com/v1/search?name={self.city_name.title()}&count=1&language={self.lang_input}"
+        self.lang_input = input("\nEnter language you want (e.g. en, pl):\n >>> ").lower().strip()
+        self.city_name = input("Enter the name of the city you want to check the weather in:\n >>> ").rstrip().lstrip()
+        self.URL_TO_PICK_CITY_LAT_AND_LONG = f"https://geocoding-api.open-meteo.com/v1/search?name={self.city_name}&count=1&language={self.lang_input}"
         self.city_data = {}
         self.city_name = ""
         self.latitude = ""
@@ -63,8 +63,9 @@ class WeatherFetcher:
             self.city_name += self.city_data['name']
             self.latitude += str(self.city_data['latitude'])
             self.longitude += str(self.city_data['longitude'])
-            self.API_URL += (f"https://api.open-meteo.com/v1/forecast?latitude={self.latitude}&longitude={self.longitude}&"
-                   "hourly=temperature_2m,precipitation,weather_code,wind_speed_10m,relative_humidity_2m&timezone=auto")
+            self.API_URL += (
+                f"https://api.open-meteo.com/v1/forecast?latitude={self.latitude}&longitude={self.longitude}&"
+                "hourly=temperature_2m,precipitation,weather_code,wind_speed_10m,relative_humidity_2m&timezone=auto")
             return True
         except Exception as e:
             print(f"ERROR OF FETCHING DATA: {e}")
@@ -115,13 +116,13 @@ class WeatherFetcher:
             humidity = self.hourly['relative_humidity_2m'][hr_index]
 
             # Fetching and translating weather code
-            raw_code = self.hourly['weather_code'][hr_index]
+            raw_weather_code = self.hourly['weather_code'][hr_index]
             translator = WeatherCodeTranslator()
-            weather_description = translator.get_description(raw_code)
+            weather_description = translator.get_description(raw_weather_code)
 
             print("\nWEATHER_FORECAST (for the nearest hour):\n"
                   "---------------------------------------------\n"
-                  f"  NAZWA_MIASTA:\n    {self.city_name}\n"
+                  f"  NAZWA_MIASTA/KRAJU:\n    {self.city_name}\n"
                   f"\n  DATA | GODZINA\n(czas lokalny urządzenia, nie sprawdzanego kraju):\n    {date_for_usr}\n"
                   f"\n  OPIS_POGODY:\n    {weather_description}\n"
                   f"\n  TEMPERATURA:\n    {temperature}°C\n"
