@@ -52,9 +52,6 @@ class WeatherFetcher:
         self.city_name = input("Enter the name of the city you want to check the weather in:\n >>> ").rstrip().lstrip()
         self.URL_TO_PICK_CITY_LAT_AND_LONG = f"https://geocoding-api.open-meteo.com/v1/search?name={self.city_name}&count=1&language={self.lang_input}"
         self.city_data = {}
-        self.city_name = ""
-        self.latitude = ""
-        self.longitude = ""
         self.API_URL = ""
 
     def get_city_data(self):
@@ -62,11 +59,11 @@ class WeatherFetcher:
         try:
             self.data = requests.get(self.URL_TO_PICK_CITY_LAT_AND_LONG).json()
             self.city_data = self.data['results'][0]
-            self.city_name += self.city_data['name']
-            self.latitude += str(self.city_data['latitude'])
-            self.longitude += str(self.city_data['longitude'])
-            self.API_URL += (
-                f"https://api.open-meteo.com/v1/forecast?latitude={self.latitude}&longitude={self.longitude}&"
+            self.city_name = self.city_data['name']
+            latitude = str(self.city_data['latitude'])
+            longitude = str(self.city_data['longitude'])
+            self.API_URL = (
+                f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&"
                 "hourly=temperature_2m,precipitation,weather_code,wind_speed_10m,relative_humidity_2m&timezone=auto")
             return True
         except Exception as e:
