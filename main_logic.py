@@ -3,6 +3,7 @@ from datetime import datetime
 
 
 class WeatherCodeTranslator:
+    """Class with weather codes and their definitions as keys and vals"""
     def __init__(self):
         # Dict with: key(weather code): val(short weather code description)
         self._WEATHER_CODES = {
@@ -39,6 +40,7 @@ class WeatherCodeTranslator:
 
 
 class WeatherFetcher:
+    """This class gets the data about weather from Open-Meteo and geocoding APIs"""
     def __init__(self):
         """Attributes are dicts in which will be stored all
         keys and vals from JSON file from Open-Meteo"""
