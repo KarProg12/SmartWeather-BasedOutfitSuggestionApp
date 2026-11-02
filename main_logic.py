@@ -62,9 +62,9 @@ class WeatherFetcher:
             self.city_name = self.city_data['name']
             latitude = str(self.city_data['latitude'])
             longitude = str(self.city_data['longitude'])
-            self.API_URL = (
-                f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&"
-                "hourly=temperature_2m,precipitation,weather_code,wind_speed_10m,relative_humidity_2m&timezone=auto")
+            self.API_URL = (f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&"
+                             "hourly=temperature_2m,apparent_temperature,precipitation,precipitation_probability,rain,showers,snowfall,weather_code,wind_speed_10m,wind_gusts_10m,wind_direction_10m,relative_humidity_2m,dewpoint_2m,pressure_msl,surface_pressure,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,visibility&timezone=auto")
+            print(self.API_URL)
             return True
         except Exception as e:
             print(f"ERROR OF FETCHING DATA: {e}")
@@ -110,7 +110,9 @@ class WeatherFetcher:
 
             # Fetching data for found hour index
             temperature = self.hourly['temperature_2m'][hr_index]
+            apparent_temperature = self.hourly['apparent_temperature'][hr_index]
             precipitation = self.hourly['precipitation'][hr_index]
+            precipitation_probability = self.hourly['precipitation_probability'][hr_index]
             wind_speed = self.hourly['wind_speed_10m'][hr_index]
             humidity = self.hourly['relative_humidity_2m'][hr_index]
 
@@ -122,12 +124,14 @@ class WeatherFetcher:
             print("\nWEATHER_FORECAST (for the nearest hour):\n"
                   "---------------------------------------------\n"
                   f"  NAZWA_MIASTA/KRAJU:\n    {self.city_name}\n"
-                  f"\n  DATA | GODZINA\n(czas lokalny urządzenia, nie sprawdzanego kraju):\n    {date_for_usr}\n"
-                  f"\n  OPIS_POGODY:\n    {weather_description}\n"
-                  f"\n  TEMPERATURA:\n    {temperature}°C\n"
-                  f"\n  WILGOTNOŚĆ:\n    {humidity}%\n"
-                  f"\n  GĘSTOŚĆ_OPADÓW:\n    {precipitation}mm\n"
-                  f"\n  PRĘDKOŚĆ_WIATRU:\n    {wind_speed}km/h")
+                  f"DATA | GODZINA\n(czas lokalny urządzenia, nie sprawdzanego kraju):\n    {date_for_usr}\n"
+                  f"OPIS_POGODY:\n    {weather_description}\n"
+                  f"TEMPERATURA:\n    {temperature}°C\n"
+                  f"TEMPERATURA_ODCZUWALNA:\n    {apparent_temperature}°C\n"
+                  f"WILGOTNOŚĆ:\n    {humidity}%\n"
+                  f"PRAWDOPODOBIEŃSTWO_OPADÓW:\n    {precipitation_probability}%\n"
+                  f"GĘSTOŚĆ_OPADÓW:\n    {precipitation}mm\n"
+                  f"PRĘDKOŚĆ_WIATRU:\n    {wind_speed}km/h")
 
         except ValueError:
             print(f"\nERROR: HOUR {hourly_weather_time} IS OUT OF FORECAST SCOPE")
