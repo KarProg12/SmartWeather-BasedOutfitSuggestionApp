@@ -62,8 +62,7 @@ class WeatherFetcher:
             self.city_name = self.city_data['name']
             latitude = str(self.city_data['latitude'])
             longitude = str(self.city_data['longitude'])
-            self.API_URL = (f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&"
-                             "hourly=temperature_2m,apparent_temperature,precipitation,precipitation_probability,rain,showers,snowfall,weather_code,wind_speed_10m,wind_gusts_10m,wind_direction_10m,relative_humidity_2m,dewpoint_2m,pressure_msl,surface_pressure,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,visibility&timezone=auto")
+            self.API_URL = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&hourly=temperature_2m,apparent_temperature,precipitation,precipitation_probability,weather_code,wind_speed_10m,wind_direction_10m,relative_humidity_2m,dewpoint_2m,pressure_msl,cloud_cover,visibility&timezone=auto"
             print(self.API_URL)
             return True
         except Exception as e:
@@ -113,24 +112,42 @@ class WeatherFetcher:
             apparent_temperature = self.hourly['apparent_temperature'][hr_index]
             precipitation = self.hourly['precipitation'][hr_index]
             precipitation_probability = self.hourly['precipitation_probability'][hr_index]
+            cloud_cover = self.hourly['cloud_cover'][hr_index]
+            visibility = self.hourly['visibility'][hr_index]
+            visibility_unit = ""
             wind_speed = self.hourly['wind_speed_10m'][hr_index]
-            humidity = self.hourly['relative_humidity_2m'][hr_index]
+            wind_direction = self.hourly['wind_direction_10m'][hr_index]
+            relative_humidity = self.hourly['relative_humidity_2m'][hr_index]
+            dewpoint = self.hourly['dewpoint_2m'][hr_index]
+            atmospheric_pressure = self.hourly['pressure_msl'][hr_index]
 
             # Fetching and translating weather code
             raw_weather_code = self.hourly['weather_code'][hr_index]
             translator = WeatherCodeTranslator()
             weather_description = translator.get_description(raw_weather_code)
 
+            if visibility >= 1000:
+                visibility = visibility / 1000
+                visibility_unit = "km"
+            elif visibility < 1000:
+                visibility = visibility
+                visibility_unit = "m"
+
             print("\nWEATHER_FORECAST (for the nearest hour):\n"
                   "---------------------------------------------\n"
                   f"  NAZWA_MIASTA/KRAJU:\n    {self.city_name}\n"
                   f"DATA | GODZINA\n(czas lokalny urządzenia, nie sprawdzanego kraju):\n    {date_for_usr}\n"
                   f"OPIS_POGODY:\n    {weather_description}\n"
+                  f"ZACHMURZENIE:\n    {cloud_cover}%\n"
+                  f"WIDOCZNOŚĆ:\n    {visibility}{visibility_unit}\n"
                   f"TEMPERATURA:\n    {temperature}°C\n"
                   f"TEMPERATURA_ODCZUWALNA:\n    {apparent_temperature}°C\n"
-                  f"WILGOTNOŚĆ:\n    {humidity}%\n"
+                  f"WILGOTNOŚĆ:\n    {relative_humidity}%\n"
+                  f"PUNKT_ROSY:\n    {dewpoint}°C\n"
                   f"PRAWDOPODOBIEŃSTWO_OPADÓW:\n    {precipitation_probability}%\n"
                   f"GĘSTOŚĆ_OPADÓW:\n    {precipitation}mm\n"
+                  f"CIŚNIENIE_ATMOSFERYCZNE:\n    {atmospheric_pressure}hPa\n"
+                  f"KIERUNEK_WIATRU:\n    {wind_direction}°\n"
                   f"PRĘDKOŚĆ_WIATRU:\n    {wind_speed}km/h")
 
         except ValueError:
