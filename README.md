@@ -13,3 +13,7 @@
 - [x] pressure_msl > "hPa"
 - [x] cloud_cover > "%"
 - [x] visibility > "m"
+- [x] rain > "mm"
+- [x] showers > "mm"
+- [x] snowfall > "cm"
+- [x] snow_depth > "m"

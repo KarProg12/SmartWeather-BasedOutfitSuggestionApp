@@ -7,30 +7,45 @@ class WeatherCodeTranslator:
     def __init__(self):
         # Dict with: key(weather code): val(short weather code description)
         self._WEATHER_CODES = {
-            0: "Słonecznie, bezchmurnie",
-            1: "Przejaśnienia, prawie bezchmurnie",
-            2: "Umiarkowane, częściowe zachmurzenie",
-            3: "Zachmurzenie całkowite, pochmurno",
-            45: "Mgła, zamglenie",
-            48: "Marznąca mgła, mgła osadzająca szron",
-            51: "Lekka mżawka, słaby opad mżawki",
-            53: "Mżawka, umiarkowana mżawka",
-            55: "Silna mżawka, intensywna mżawka",
-            61: "Lekki deszcz, słaby deszcz",
-            63: "Deszcz, umiarkowany deszcz",
-            65: "Silny deszcz, ulewa",
-            71: "Lekki śnieg, słabe opady śniegu",
-            73: "Śnieg, umiarkowane opady śniegu",
-            75: "Silny śnieg, śnieżyca",
-            77: "Śnieg ziarnisty, krupa śnieżna",
-            80: "Przelotny deszcz, przelotny opad",
-            81: "Przelotny deszcz, silny opad przelotny",
-            82: "Ulewa, gwałtowny deszcz przelotny",
-            85: "Przelotny śnieg",
-            86: "Śnieżyca przelotna",
-            95: "Burza, burza z piorunami",
-            96: "Burza z gradem",
-            99: "Gwałtowna burza, silna burza z gradem",
+            0: "Bezchmurnie",
+            1: "Przeważnie bezchmurnie",
+            2: "Częściowe zachmurzenie",
+            3: "Pochmurno",
+
+            45: "Mgła",
+            48: "Mgła osadzająca szadź",
+
+            51: "Lekka mżawka",
+            53: "Umiarkowana mżawka",
+            55: "Intensywna mżawka",
+
+            56: "Lekka marznąca mżawka",
+            57: "Intensywna marznąca mżawka",
+
+            61: "Lekki deszcz",
+            63: "Umiarkowany deszcz",
+            65: "Silny deszcz",
+
+            66: "Lekki marznący deszcz",
+            67: "Silny marznący deszcz",
+
+            71: "Lekki opad śniegu",
+            73: "Umiarkowany opad śniegu",
+            75: "Silny opad śniegu",
+
+            77: "Ziarna śniegu",
+
+            80: "Słabe przelotne opady deszczu",
+            81: "Umiarkowane przelotne opady deszczu",
+            82: "Gwałtowne przelotne opady deszczu",
+
+            85: "Słabe przelotne opady śniegu",
+            86: "Intensywne przelotne opady śniegu",
+
+            95: "Burza",
+            96: "Burza z lekkim gradem",
+            97: "Silna burza",
+            99: "Burza z silnym gradem"
         }
 
     def get_description(self, weather_code):
@@ -62,7 +77,7 @@ class WeatherFetcher:
             self.city_name = self.city_data['name']
             latitude = str(self.city_data['latitude'])
             longitude = str(self.city_data['longitude'])
-            self.API_URL = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&hourly=temperature_2m,apparent_temperature,precipitation,precipitation_probability,weather_code,wind_speed_10m,wind_direction_10m,relative_humidity_2m,dewpoint_2m,pressure_msl,cloud_cover,visibility&timezone=auto"
+            self.API_URL = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&hourly=temperature_2m,apparent_temperature,precipitation,precipitation_probability,rain,showers,snowfall,snow_depth,weather_code,wind_speed_10m,wind_direction_10m,relative_humidity_2m,dewpoint_2m,pressure_msl,cloud_cover,visibility&timezone=auto"
             print(self.API_URL)
             return True
         except Exception as e:
@@ -112,6 +127,10 @@ class WeatherFetcher:
             apparent_temperature = self.hourly['apparent_temperature'][hr_index]
             precipitation = self.hourly['precipitation'][hr_index]
             precipitation_probability = self.hourly['precipitation_probability'][hr_index]
+            rain = self.hourly['rain'][hr_index]
+            showers = self.hourly['showers'][hr_index]
+            snowfall = self.hourly['snowfall'][hr_index]
+            snow_depth = self.hourly['snow_depth'][hr_index]
             cloud_cover = self.hourly['cloud_cover'][hr_index]
             visibility = self.hourly['visibility'][hr_index]
             visibility_unit = ""
@@ -162,7 +181,11 @@ class WeatherFetcher:
                   f"WILGOTNOŚĆ:\n    {relative_humidity}%\n"
                   f"PUNKT_ROSY:\n    {dewpoint}°C\n"
                   f"PRAWDOPODOBIEŃSTWO_OPADÓW:\n    {precipitation_probability}%\n"
-                  f"GĘSTOŚĆ_OPADÓW:\n    {precipitation}mm\n"
+                  f"SUMA_WSZELKICH_OPADÓW:\n    {precipitation}mm\n"
+                  f"OPADY_PRZELOTNE:\n    {showers}mm\n"
+                  f"OPAD_DESZCZU:\n    {rain}mm\n"
+                  f"OPAD_ŚNIEGU:\n    {snowfall}cm\n"
+                  f"GRUBOŚĆ_POKRYWY_ŚNIEŻNEJ:\n    {snow_depth}m\n"
                   f"CIŚNIENIE_ATMOSFERYCZNE:\n    {atmospheric_pressure}hPa\n"
                   f"KIERUNEK_WIATRU:\n    {wind_direction}° ({wind_direction_name})\n"
                   f"PRĘDKOŚĆ_WIATRU:\n    {wind_speed}km/h")
