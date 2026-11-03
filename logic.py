@@ -78,7 +78,7 @@ class WeatherFetcher:
             latitude = str(self.city_data['latitude'])
             longitude = str(self.city_data['longitude'])
             self.API_URL = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&hourly=temperature_2m,apparent_temperature,precipitation,precipitation_probability,rain,showers,snowfall,snow_depth,weather_code,wind_speed_10m,wind_direction_10m,relative_humidity_2m,dewpoint_2m,pressure_msl,cloud_cover,visibility&timezone=auto"
-            print(self.API_URL)
+            print(f"\nWeather data root: {self.API_URL}")
             return True
         except Exception as e:
             print(f"ERROR OF FETCHING DATA: {e}")
@@ -169,26 +169,27 @@ class WeatherFetcher:
             weather_description = translator.get_description(raw_weather_code)
 
 
-            print("\nWEATHER_FORECAST (for the nearest hour):\n"
+            print("\n---------------------------------------------\n"
+		  "WEATHER_FORECAST (for the nearest hour):\n"
                   "---------------------------------------------\n"
                   f"  NAZWA_MIASTA/KRAJU:\n    {self.city_name}\n"
-                  f"DATA | GODZINA\n(czas lokalny urządzenia, nie sprawdzanego kraju):\n    {date_for_usr}\n"
-                  f"OPIS_POGODY:\n    {weather_description}\n"
-                  f"ZACHMURZENIE:\n    {cloud_cover}%\n"
-                  f"WIDOCZNOŚĆ:\n    {visibility}{visibility_unit}\n"
-                  f"TEMPERATURA:\n    {temperature}°C\n"
-                  f"TEMPERATURA_ODCZUWALNA:\n    {apparent_temperature}°C\n"
-                  f"WILGOTNOŚĆ:\n    {relative_humidity}%\n"
-                  f"PUNKT_ROSY:\n    {dewpoint}°C\n"
-                  f"PRAWDOPODOBIEŃSTWO_OPADÓW:\n    {precipitation_probability}%\n"
-                  f"SUMA_WSZELKICH_OPADÓW:\n    {precipitation}mm\n"
-                  f"OPADY_PRZELOTNE:\n    {showers}mm\n"
-                  f"OPAD_DESZCZU:\n    {rain}mm\n"
-                  f"OPAD_ŚNIEGU:\n    {snowfall}cm\n"
-                  f"GRUBOŚĆ_POKRYWY_ŚNIEŻNEJ:\n    {snow_depth}m\n"
-                  f"CIŚNIENIE_ATMOSFERYCZNE:\n    {atmospheric_pressure}hPa\n"
-                  f"KIERUNEK_WIATRU:\n    {wind_direction}° ({wind_direction_name})\n"
-                  f"PRĘDKOŚĆ_WIATRU:\n    {wind_speed}km/h")
+                  f"  DATA | GODZINA\n(czas lokalny urządzenia, nie sprawdzanego kraju):\n    {date_for_usr}\n"
+                  f"  OPIS_POGODY:\n    {weather_description}\n"
+                  f"  ZACHMURZENIE:\n    {cloud_cover}%\n"
+                  f"  WIDOCZNOŚĆ:\n    {visibility}{visibility_unit}\n"
+                  f"  TEMPERATURA:\n    {temperature}°C\n"
+                  f"  TEMPERATURA_ODCZUWALNA:\n    {apparent_temperature}°C\n"
+                  f"  WILGOTNOŚĆ:\n    {relative_humidity}%\n"
+                  f"  PUNKT_ROSY:\n    {dewpoint}°C\n"
+                  f"  PRAWDOPODOBIEŃSTWO_OPADÓW:\n    {precipitation_probability}%\n"
+                  f"  SUMA_WSZELKICH_OPADÓW:\n    {precipitation}mm\n"
+                  f"  OPADY_PRZELOTNE:\n    {showers}mm\n"
+                  f"  OPAD_DESZCZU:\n    {rain}mm\n"
+                  f"  OPAD_ŚNIEGU:\n    {snowfall}cm\n"
+                  f"  GRUBOŚĆ_POKRYWY_ŚNIEŻNEJ:\n    {snow_depth}m\n"
+                  f"  CIŚNIENIE_ATMOSFERYCZNE:\n    {atmospheric_pressure}hPa\n"
+                  f"  KIERUNEK_WIATRU:\n    {wind_direction}° ({wind_direction_name})\n"
+                  f"  PRĘDKOŚĆ_WIATRU:\n    {wind_speed}km/h")
 
         except ValueError:
             print(f"\nERROR: HOUR {hourly_weather_time} IS OUT OF FORECAST SCOPE")
