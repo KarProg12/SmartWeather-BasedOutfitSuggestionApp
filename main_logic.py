@@ -115,8 +115,31 @@ class WeatherFetcher:
             cloud_cover = self.hourly['cloud_cover'][hr_index]
             visibility = self.hourly['visibility'][hr_index]
             visibility_unit = ""
+            if visibility >= 1000:
+                visibility = visibility / 1000
+                visibility_unit = "km"
+            elif visibility < 1000:
+                visibility = visibility
+                visibility_unit = "m"
             wind_speed = self.hourly['wind_speed_10m'][hr_index]
             wind_direction = self.hourly['wind_direction_10m'][hr_index]
+            wind_direction_name = ""
+            if 337.5 <= wind_direction <= 360 or 0 <= wind_direction < 22.5:
+                wind_direction_name = "N"
+            elif 22.5 <= wind_direction < 67.5:
+                wind_direction_name = "NE"
+            elif 67.5 <= wind_direction < 112.5:
+                wind_direction_name = "E"
+            elif 112.5 <= wind_direction < 157.5:
+                wind_direction_name = "SE"
+            elif 157.5 <= wind_direction < 202.5:
+                wind_direction_name = "S"
+            elif 202.5 <= wind_direction < 247.5:
+                wind_direction_name = "SW"
+            elif 247.5 <= wind_direction < 292.5:
+                wind_direction_name = "W"
+            elif 292.5 <= wind_direction < 337.5:
+                wind_direction_name = "NW"
             relative_humidity = self.hourly['relative_humidity_2m'][hr_index]
             dewpoint = self.hourly['dewpoint_2m'][hr_index]
             atmospheric_pressure = self.hourly['pressure_msl'][hr_index]
@@ -126,12 +149,6 @@ class WeatherFetcher:
             translator = WeatherCodeTranslator()
             weather_description = translator.get_description(raw_weather_code)
 
-            if visibility >= 1000:
-                visibility = visibility / 1000
-                visibility_unit = "km"
-            elif visibility < 1000:
-                visibility = visibility
-                visibility_unit = "m"
 
             print("\nWEATHER_FORECAST (for the nearest hour):\n"
                   "---------------------------------------------\n"
@@ -147,7 +164,7 @@ class WeatherFetcher:
                   f"PRAWDOPODOBIEŃSTWO_OPADÓW:\n    {precipitation_probability}%\n"
                   f"GĘSTOŚĆ_OPADÓW:\n    {precipitation}mm\n"
                   f"CIŚNIENIE_ATMOSFERYCZNE:\n    {atmospheric_pressure}hPa\n"
-                  f"KIERUNEK_WIATRU:\n    {wind_direction}°\n"
+                  f"KIERUNEK_WIATRU:\n    {wind_direction}° ({wind_direction_name})\n"
                   f"PRĘDKOŚĆ_WIATRU:\n    {wind_speed}km/h")
 
         except ValueError:
