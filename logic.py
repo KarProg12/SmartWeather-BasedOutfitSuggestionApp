@@ -169,9 +169,9 @@ class WeatherFetcher:
             weather_description = translator.get_description(raw_weather_code)
 
 
-            print("\n---------------------------------------------\n"
+            print("\n----------------------------------------\n"
 		  "WEATHER_FORECAST (for the nearest hour):\n"
-                  "---------------------------------------------\n"
+                  "----------------------------------------\n"
                   f"  NAZWA_MIASTA/KRAJU:\n    {self.city_name}\n"
                   f"  DATA | GODZINA\n(czas lokalny urządzenia, nie sprawdzanego kraju):\n    {date_for_usr}\n"
                   f"  OPIS_POGODY:\n    {weather_description}\n"
