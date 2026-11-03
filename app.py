@@ -1,4 +1,4 @@
-from main_logic import WeatherFetcher
+from logic import WeatherFetcher
 
 
 def run_app():
