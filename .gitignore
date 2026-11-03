@@ -1,3 +1,5 @@
 tests_app.py
 tests_logic.py
+tests_app_gui.py
+tests_logic_gui.py
 .idea
