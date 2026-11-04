@@ -78,7 +78,7 @@ class WeatherFetcher:
             latitude = str(self.city_data['latitude'])
             longitude = str(self.city_data['longitude'])
             self.API_URL = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&hourly=temperature_2m,apparent_temperature,precipitation,precipitation_probability,rain,showers,snowfall,snow_depth,weather_code,wind_speed_10m,wind_direction_10m,relative_humidity_2m,dewpoint_2m,pressure_msl,cloud_cover,visibility&timezone=auto"
-            print(f"\nWeather data root: {self.API_URL}")
+            print(f"\n  Weather data root (Bydgoszcz coordinates by default):\n       {self.API_URL}")
             return True
         except Exception as e:
             print(f"ERROR OF FETCHING DATA: {e}")

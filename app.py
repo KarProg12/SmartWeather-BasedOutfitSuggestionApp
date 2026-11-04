@@ -12,4 +12,5 @@ def run_app():
         print("\nFAILED TO INITIALIZE APP BECAUSE OF NETWORK ERROR")
 
 
-run_app()
+if __name__ == '__main__':
+    run_app()
