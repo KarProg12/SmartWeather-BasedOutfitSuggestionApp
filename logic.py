@@ -1,4 +1,5 @@
 import requests
+from rich import print
 from datetime import datetime
 
 
@@ -170,9 +171,9 @@ class WeatherFetcher:
 
 
             print("\n----------------------------------------\n"
-		  "WEATHER_FORECAST (for the nearest hour):\n"
+		  "[green]WEATHER_FORECAST (for the nearest hour):[/green]\n"
                   "----------------------------------------\n"
-                  f"  NAZWA_MIASTA/KRAJU:\n    {self.city_name}\n"
+                  f"  [italic yellow]NAZWA_MIASTA/KRAJU:\n    {self.city_name}\n"
                   f"  DATA | GODZINA\n(czas lokalny urządzenia, nie sprawdzanego kraju):\n    {date_for_usr}\n"
                   f"  OPIS_POGODY:\n    {weather_description}\n"
                   f"  ZACHMURZENIE:\n    {cloud_cover}%\n"
@@ -189,7 +190,7 @@ class WeatherFetcher:
                   f"  GRUBOŚĆ_POKRYWY_ŚNIEŻNEJ:\n    {snow_depth}m\n"
                   f"  CIŚNIENIE_ATMOSFERYCZNE:\n    {atmospheric_pressure}hPa\n"
                   f"  KIERUNEK_WIATRU:\n    {wind_direction}° ({wind_direction_name})\n"
-                  f"  PRĘDKOŚĆ_WIATRU:\n    {wind_speed}km/h")
+                  f"  PRĘDKOŚĆ_WIATRU:\n    {wind_speed}km/h[/italic yellow]")
 
         except ValueError:
-            print(f"\nERROR: HOUR {hourly_weather_time} IS OUT OF FORECAST SCOPE")
+            print(f"\n[bold red]ERROR: HOUR {hourly_weather_time} IS OUT OF FORREST SCOPE[/bold red]")
